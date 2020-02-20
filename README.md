@@ -1,2 +1,2 @@
 # PV239
-Seminárný project
+Seminar project for PV239
