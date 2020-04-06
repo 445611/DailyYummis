@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DailyYummies</string>
+    <string name="settings_home">My Home</string>
 </resources>
