@@ -1,12 +1,20 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorMainBarRed">@color/colorMainBarRed</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryLightColor</item>
+        <item name="colorAccent">@color/primaryDarkColor</item>
+    </style>
+
+    <style name="ToolbarStyle" parent="Theme.Design.NoActionBar">
+        <item name="android:background">@color/primaryColor</item>
+    </style>
+
+    <style name="BottomNavigationTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/secondaryTextColor</item>
+        <item name="android:textColorSecondary">@color/primaryDarkColor</item>
     </style>
 
 </resources>
