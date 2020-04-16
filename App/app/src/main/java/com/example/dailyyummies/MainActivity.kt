@@ -1,10 +1,15 @@
 package com.example.dailyyummies
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageButton
-import androidx.appcompat.widget.Toolbar
+import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
+import com.example.dailyyummies.settings.SettingsActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,17 +17,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val toolbar = findViewById<Toolbar>(R.id.main_toolbar)
-        setSupportActionBar(toolbar)
+        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        navView.setupWithNavController(findNavController(R.id.nav_host_fragment))
 
-        val settingsButton = findViewById<ImageButton>(R.id.settings_button)
-        settingsButton.setOnClickListener {
-            val intent = Intent(this.baseContext, SettingsActivity::class.java)
-            startActivity(intent)
-        }
-
-
+        setSupportActionBar(findViewById(R.id.include))
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.settings) {
+            startActivity(Intent(applicationContext, SettingsActivity::class.java))
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
 }
