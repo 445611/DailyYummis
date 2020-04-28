@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/thirdFragmentNav"
-        android:name="cz.muni.fi.pv239.dailyyummies.MenuFragment"
+        android:name="cz.muni.fi.pv239.dailyyummies.menu.MenuFragment"
         android:label="fragment_third"
         tools:layout="@layout/fragment_menu" />
 </navigation>

@@ -3,7 +3,6 @@ package cz.muni.fi.pv239.dailyyummies.home
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import cz.muni.fi.pv239.dailyyummies.FoodType
 import cz.muni.fi.pv239.dailyyummies.R
 import cz.muni.fi.pv239.dailyyummies.utils.inflate
 import kotlinx.android.synthetic.main.home_food_row.view.*
@@ -41,4 +40,3 @@ class CustomViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
         }
     }
 }
-
