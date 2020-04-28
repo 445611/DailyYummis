@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">DailyYummies</string>
     <string name="settings_title">Settings</string>
-    <string name="settings_home">SETTINGS HERE!</string>
+    <string name="settings_my_home">My home</string>
     <string name="main_question">What would you like to eat today?</string>
     <string name="map_fragment_text">MAP HERE!</string>
     <string name="food_list">FOOD LIST HERE !</string>
@@ -9,4 +9,5 @@
     <string name="home_navbar_title">HOME</string>
     <string name="map_navbar_title">MAP</string>
     <string name="menus_navbar_title">MENUS</string>
+    <string name="default_radius">Default radius</string>
 </resources>
