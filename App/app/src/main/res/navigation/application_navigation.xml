@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/firstFragmentNav"
-        android:name="com.example.dailyyummies.FirstFragment"
+        android:name="cz.muni.fi.pv239.dailyyummies.HomeFragment"
         android:label="fragment_first"
-        tools:layout="@layout/fragment_first" >
+        tools:layout="@layout/fragment_home" >
     </fragment>
     <fragment
         android:id="@+id/secondFragmentNav"
-        android:name="com.example.dailyyummies.SecondFragment"
+        android:name="cz.muni.fi.pv239.dailyyummies.MapFragment"
         android:label="fragment_second"
-        tools:layout="@layout/fragment_second" >
+        tools:layout="@layout/fragment_map" >
     </fragment>
     <fragment
         android:id="@+id/thirdFragmentNav"
-        android:name="com.example.dailyyummies.ThirdFragment"
+        android:name="cz.muni.fi.pv239.dailyyummies.MenuFragment"
         android:label="fragment_third"
-        tools:layout="@layout/fragment_third" />
+        tools:layout="@layout/fragment_menu" />
 </navigation>

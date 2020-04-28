@@ -1,21 +1,29 @@
-package com.example.dailyyummies
+package cz.muni.fi.pv239.dailyyummies
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.dailyyummies.settings.SettingsActivity
+import cz.muni.fi.pv239.dailyyummies.model.SharedViewModel
+import cz.muni.fi.pv239.dailyyummies.settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
+
+    private val viewModel: SharedViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Example how to work with SharedViewModel
+        viewModel.setSharedText("Init TEXT")
+        viewModel.initSharedPreferences(this)
+        //
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navView.setupWithNavController(findNavController(R.id.nav_host_fragment))

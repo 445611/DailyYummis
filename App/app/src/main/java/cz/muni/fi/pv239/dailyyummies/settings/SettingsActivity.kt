@@ -1,8 +1,8 @@
-package com.example.dailyyummies.settings
+package cz.muni.fi.pv239.dailyyummies.settings
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.dailyyummies.R
+import cz.muni.fi.pv239.dailyyummies.R
 
 class SettingsActivity : AppCompatActivity() {
 
