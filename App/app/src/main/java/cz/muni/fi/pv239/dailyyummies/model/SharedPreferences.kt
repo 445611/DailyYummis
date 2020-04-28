@@ -6,15 +6,24 @@ class SharedPreferences(context: Context){
 
     companion object {
         const val MY_PREF = "dailyyummies_preferences"
-        //const val APP_OPEN_COUNT = "app_open_count"
+        const val DEFAULT_HOME = "default_home"
+        const val DEFAULT_RADIUS = "default_radius"
     }
     val preferences = context.getSharedPreferences(MY_PREF, Context.MODE_PRIVATE)
 
-    /*fun getAppOpenCount(): Int{
-        return preferences.getInt(APP_OPEN_COUNT, 0)
+    fun getDefaultHome(): String? {
+        return preferences.getString(DEFAULT_HOME, "");
     }
 
-    fun setAppOpenCount(count: Int){
-        preferences.edit().putInt(APP_OPEN_COUNT, count).apply()
-    }*/
+    fun setDefaultHome(new_home: String) {
+        preferences.edit().putString(DEFAULT_HOME, new_home).apply()
+    }
+
+    fun getDefaultRadius(): Int {
+        return preferences.getInt(DEFAULT_RADIUS, 500);
+    }
+
+    fun setDefaultRadius(new_radius: Int) {
+        preferences.edit().putInt(DEFAULT_RADIUS, new_radius).apply()
+    }
 }

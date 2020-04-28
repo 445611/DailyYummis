@@ -1,10 +1,15 @@
 package cz.muni.fi.pv239.dailyyummies.settings
 
 import android.os.Bundle
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import cz.muni.fi.pv239.dailyyummies.R
+import cz.muni.fi.pv239.dailyyummies.model.SharedPreferences
 
 class SettingsActivity : AppCompatActivity() {
+
+    lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -12,5 +17,27 @@ class SettingsActivity : AppCompatActivity() {
 
         setSupportActionBar(findViewById(R.id.include))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        initSharedPreferences()
+        initSettings()
+    }
+
+    fun initSharedPreferences() {
+        sharedPreferences =
+            SharedPreferences(this)
+    }
+
+    fun initSettings() {
+        val defaultHome: EditText = findViewById(R.id.defaultHome)
+        defaultHome.addTextChangedListener {
+            sharedPreferences.setDefaultHome(defaultHome.text.toString())
+        }
+        defaultHome.setText(sharedPreferences.getDefaultHome());
+
+        val defaultRadius: EditText = findViewById(R.id.defaultRadius)
+        defaultRadius.addTextChangedListener {
+            sharedPreferences.setDefaultRadius(defaultRadius.text.toString().toIntOrNull() ?: 0)
+        }
+        defaultRadius.setText(sharedPreferences.getDefaultRadius().toString());
     }
 }

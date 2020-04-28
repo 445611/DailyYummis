@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/settings"
-        android:title="@string/settings_home"
+        android:title="@string/settings_my_home"
         android:icon="@drawable/ic_settings_black_24dp"
         app:showAsAction="always"/>
 </menu>
