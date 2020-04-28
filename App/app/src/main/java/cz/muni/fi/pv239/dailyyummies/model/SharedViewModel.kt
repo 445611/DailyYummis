@@ -4,7 +4,8 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import cz.muni.fi.pv239.dailyyummies.model.SharedPreferences
+import cz.muni.fi.pv239.dailyyummies.menu.restaurant.Meal
+import cz.muni.fi.pv239.dailyyummies.menu.restaurant.Restaurant
 
 class SharedViewModel: ViewModel() {
 
@@ -21,5 +22,53 @@ class SharedViewModel: ViewModel() {
     fun initSharedPreferences(context: Context) {
         sharedPreferences =
             SharedPreferences(context)
+    }
+
+    fun getMeals(): MutableSet<Meal> {
+        return mutableSetOf(
+            Meal("Rizek a pivo", 125.toFloat()),
+            Meal("Knedlo vepro zeli", 119.toFloat())
+        )
+    }
+
+    fun getAllRestaurants(): List<Restaurant> {
+        return listOf(
+            Restaurant(
+                "U karla",
+                5.toFloat(),
+                600,
+                getMeals()
+            ),
+            Restaurant(
+                "U Drevaka",
+                4.5.toFloat(),
+                200,
+                getMeals()
+            ),
+            Restaurant(
+                "U karla",
+                5.toFloat(),
+                600,
+                getMeals()
+            ),
+            Restaurant(
+                "U Drevaka",
+                4.5.toFloat(),
+                200,
+                getMeals()
+            ),
+            Restaurant(
+                "U karla",
+                5.toFloat(),
+                600,
+                getMeals()
+            ),
+            Restaurant(
+                "U Drevaka",
+                4.5.toFloat(),
+                200,
+                getMeals()
+            )
+        )
     }
 }

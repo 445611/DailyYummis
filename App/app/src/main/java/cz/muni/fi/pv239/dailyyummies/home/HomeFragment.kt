@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import cz.muni.fi.pv239.dailyyummies.FoodType
+import cz.muni.fi.pv239.dailyyummies.home.FoodType
 import cz.muni.fi.pv239.dailyyummies.R
 import cz.muni.fi.pv239.dailyyummies.model.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_home.view.*

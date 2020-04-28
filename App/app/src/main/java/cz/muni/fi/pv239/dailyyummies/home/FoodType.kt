@@ -1,4 +1,4 @@
-package cz.muni.fi.pv239.dailyyummies
+package cz.muni.fi.pv239.dailyyummies.home
 
 enum class FoodType(val foodName: String) {
     HAMBURGER("Hamburger"),
