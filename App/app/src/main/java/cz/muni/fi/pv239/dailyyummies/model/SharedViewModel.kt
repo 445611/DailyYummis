@@ -27,6 +27,12 @@ class SharedViewModel: ViewModel() {
     fun getMeals(): MutableSet<Meal> {
         return mutableSetOf(
             Meal("Rizek a pivo", 125.toFloat()),
+            Meal("Knedlo vepro zeli", 119.toFloat()),
+            Meal("Rizek a pivo", 125.toFloat()),
+            Meal("Knedlo vepro zeli", 119.toFloat()),
+            Meal("Rizek a pivo", 125.toFloat()),
+            Meal("Knedlo vepro zeli", 119.toFloat()),
+            Meal("Rizek a pivo", 125.toFloat()),
             Meal("Knedlo vepro zeli", 119.toFloat())
         )
     }
