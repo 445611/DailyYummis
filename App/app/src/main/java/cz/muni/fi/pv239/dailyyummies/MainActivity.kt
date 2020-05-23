@@ -8,9 +8,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.maps.model.LatLng
 import cz.muni.fi.pv239.dailyyummies.model.SharedViewModel
 import cz.muni.fi.pv239.dailyyummies.settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import cz.muni.fi.pv239.dailyyummies.service.MapCoordinates
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,10 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Example how to work with SharedViewModel
-        viewModel.setSharedText("Init TEXT")
         viewModel.initSharedPreferences(this)
-        //
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navView.setupWithNavController(findNavController(R.id.nav_host_fragment))
@@ -42,5 +41,4 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 }

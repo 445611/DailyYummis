@@ -10,4 +10,5 @@
     <string name="map_navbar_title">MAP</string>
     <string name="menus_navbar_title">MENUS</string>
     <string name="default_radius">Default radius</string>
+    <string name="expand_menus">Expand menus</string>
 </resources>

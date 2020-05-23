@@ -6,10 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.maps.model.LatLng
 import cz.muni.fi.pv239.dailyyummies.R
-import cz.muni.fi.pv239.dailyyummies.menu.restaurant.Restaurant
+import cz.muni.fi.pv239.dailyyummies.service.networking.data.Restaurant
 import cz.muni.fi.pv239.dailyyummies.model.SharedViewModel
+import cz.muni.fi.pv239.dailyyummies.service.networking.data.RestaurantHolder
 import kotlinx.android.synthetic.main.fragment_menu.view.*
 
 /**
@@ -18,7 +21,6 @@ import kotlinx.android.synthetic.main.fragment_menu.view.*
 class MenuFragment : Fragment() {
 
     private val viewModel: SharedViewModel by activityViewModels()
-    private lateinit var restaurants: List<Restaurant>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +31,8 @@ class MenuFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_menu, container, false)
+
+        view.progressBar.visibility = View.VISIBLE
         initRestaurants(view)
 
         return view;
@@ -36,7 +40,24 @@ class MenuFragment : Fragment() {
 
     private fun initRestaurants(view: View) {
         view.menu_restaurants.layoutManager = LinearLayoutManager(context)
-        restaurants = viewModel.getAllRestaurants();
-        view.menu_restaurants.adapter = RestaurantAdapter(restaurants)
+        viewModel.searchResult.observe(viewLifecycleOwner, Observer {
+            if (viewModel.searchResult.value!!.restaurants.isEmpty()) {
+                view.progressBar.visibility = View.VISIBLE
+            } else {
+                view.progressBar.visibility = View.GONE
+            }
+            view.menu_restaurants.adapter = RestaurantAdapter(viewModel.searchResult.value!!.restaurants)
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Coordinates from GOOGLE MAPS set like this 48.725166, 21.276871
+        // 49.194935, 16.608381
+        //KO 49.210928, 16.593532
+        // 49.193176 16.610455 OREL
+
+        viewModel.fetchApiData(requireContext())
     }
 }
