@@ -4,77 +4,33 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import cz.muni.fi.pv239.dailyyummies.menu.restaurant.Meal
-import cz.muni.fi.pv239.dailyyummies.menu.restaurant.Restaurant
+import com.google.android.gms.maps.model.LatLng
+import cz.muni.fi.pv239.dailyyummies.service.ZomatoService
+import cz.muni.fi.pv239.dailyyummies.service.networking.data.SearchResult
 
-class SharedViewModel: ViewModel() {
+class SharedViewModel(var mapCoordinates: LatLng? = null, var radius: Int? = null): ViewModel() {
+
+    private lateinit var zomatoService: ZomatoService
 
     lateinit var sharedPreferences: SharedPreferences
 
-    private var _sharedText = MutableLiveData<String>()
+    private var _searchResult = MutableLiveData<SearchResult>(SearchResult())
 
-    var sharedText: LiveData<String> = _sharedText
-
-    fun setSharedText(liveData: String) {
-        _sharedText.postValue(liveData)
-    }
+    var searchResult: LiveData<SearchResult> = _searchResult
 
     fun initSharedPreferences(context: Context) {
         sharedPreferences =
             SharedPreferences(context)
+        zomatoService = ZomatoService(context, _searchResult)
+        //fetchApiData(context)
     }
 
-    fun getMeals(): MutableSet<Meal> {
-        return mutableSetOf(
-            Meal("Rizek a pivo", 125.toFloat()),
-            Meal("Knedlo vepro zeli", 119.toFloat()),
-            Meal("Rizek a pivo", 125.toFloat()),
-            Meal("Knedlo vepro zeli", 119.toFloat()),
-            Meal("Rizek a pivo", 125.toFloat()),
-            Meal("Knedlo vepro zeli", 119.toFloat()),
-            Meal("Rizek a pivo", 125.toFloat()),
-            Meal("Knedlo vepro zeli", 119.toFloat())
-        )
-    }
-
-    fun getAllRestaurants(): List<Restaurant> {
-        return listOf(
-            Restaurant(
-                "U karla",
-                5.toFloat(),
-                600,
-                getMeals()
-            ),
-            Restaurant(
-                "U Drevaka",
-                4.5.toFloat(),
-                200,
-                getMeals()
-            ),
-            Restaurant(
-                "U karla",
-                5.toFloat(),
-                600,
-                getMeals()
-            ),
-            Restaurant(
-                "U Drevaka",
-                4.5.toFloat(),
-                200,
-                getMeals()
-            ),
-            Restaurant(
-                "U karla",
-                5.toFloat(),
-                600,
-                getMeals()
-            ),
-            Restaurant(
-                "U Drevaka",
-                4.5.toFloat(),
-                200,
-                getMeals()
+    fun fetchApiData(context: Context) {
+        if (mapCoordinates != null) {
+            zomatoService.fetchRestaurantsData(
+                mapCoordinates!!,
+                radius ?: sharedPreferences.getDefaultRadius()
             )
-        )
+        }
     }
 }

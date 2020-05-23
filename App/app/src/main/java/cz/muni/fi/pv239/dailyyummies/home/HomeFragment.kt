@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import cz.muni.fi.pv239.dailyyummies.home.FoodType
+import com.google.android.gms.maps.model.LatLng
 import cz.muni.fi.pv239.dailyyummies.R
 import cz.muni.fi.pv239.dailyyummies.model.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_home.view.*
@@ -33,20 +33,6 @@ class HomeFragment : Fragment() {
 
         initFoodTypes(view)
 
-        // Example how to work with SharedViewModel
-        /*viewModel.sharedText.observe(viewLifecycleOwner, Observer {
-            view.food_list_text.text = viewModel.sharedText.value
-        })
-
-
-        view.button.setOnClickListener {
-            viewModel.setHomeFeed("Button")
-        }
-
-        view.button2.setOnClickListener {
-            viewModel.setHomeFeed("Button2")
-        }*/
-
         return view
     }
 
@@ -59,5 +45,11 @@ class HomeFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         viewModel.sharedPreferences.setSelectedFoodTypes(selectedFoodTypes)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.mapCoordinates = LatLng(49.193176, 16.610455)
     }
 }

@@ -4,10 +4,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.pv239.dailyyummies.R
+import cz.muni.fi.pv239.dailyyummies.service.networking.data.Dish
+import cz.muni.fi.pv239.dailyyummies.service.networking.data.DishHolder
 import cz.muni.fi.pv239.dailyyummies.utils.inflate
 import kotlinx.android.synthetic.main.menu_restaurant_menu_row.view.*
 
-class MenuAdapter(private val meals: MutableSet<Meal>) :
+class MenuAdapter(private val dishes: List<DishHolder>) :
     RecyclerView.Adapter<MealViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MealViewHolder {
         val row = parent.inflate(R.layout.menu_restaurant_menu_row)
@@ -15,18 +17,18 @@ class MenuAdapter(private val meals: MutableSet<Meal>) :
     }
 
     override fun getItemCount(): Int {
-        return meals.size
+        return dishes.size
     }
 
     override fun onBindViewHolder(holder: MealViewHolder, position: Int) {
-        holder.bind(meals.toList()[position])
+        holder.bind(dishes[position].dish)
     }
 
 }
 
 class MealViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-    fun bind(meal: Meal) {
-        view.meal_name.text = meal.name
-        view.meal_price.text = meal.price.toString()
+    fun bind(dish: Dish) {
+        view.meal_name.text = dish.name
+        view.meal_price.text = dish.price
     }
 }
