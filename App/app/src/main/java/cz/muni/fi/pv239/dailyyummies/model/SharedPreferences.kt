@@ -2,8 +2,8 @@ package cz.muni.fi.pv239.dailyyummies.model
 
 import android.content.Context
 import android.content.SharedPreferences.Editor
-import cz.muni.fi.pv239.dailyyummies.home.FoodType
-
+import cz.muni.fi.pv239.dailyyummies.service.networking.data.Cuisine
+import cz.muni.fi.pv239.dailyyummies.service.networking.data.CuisineHolder
 
 class SharedPreferences(context: Context) {
 
@@ -11,20 +11,23 @@ class SharedPreferences(context: Context) {
         const val MY_PREF = "dailyyummies_preferences"
         const val DEFAULT_HOME = "default_home"
         const val DEFAULT_RADIUS = "default_radius"
-        const val FOOD_TYPES = "food_types"
+        const val SELECTED_CUISINES = "selected_cuisines"
     }
 
     val preferences = context.getSharedPreferences(MY_PREF, Context.MODE_PRIVATE)
 
-    fun setSelectedFoodTypes(foodTypes: Set<FoodType>) {
+    fun setSelectedCuisines(selectedCuisines: MutableList<Int>, allCuisines: List<CuisineHolder>) {
         val editor: Editor = preferences.edit()
-        editor.putStringSet(FOOD_TYPES, foodTypes.map { it.name }.toSet())
+        selectedCuisines.filter { allCuisines.map { cuisineHolder ->  cuisineHolder.cuisine.id }.contains(it) }
+        editor.putStringSet(SELECTED_CUISINES, selectedCuisines.map { it.toString() }.toSet())
         editor.apply()
     }
 
-    fun retrieveSelectedFoodTypes(): MutableSet<FoodType> {
-        val set = preferences.getStringSet(FOOD_TYPES, null)?.map { FoodType.valueOf(it) }
-        return set?.toMutableSet() ?: mutableSetOf()
+    fun retrieveSelectedCuisines(): MutableList<Int> {
+        val a = preferences.getStringSet(SELECTED_CUISINES, emptySet())
+            ?.mapNotNull { it.toIntOrNull() }
+            ?.toMutableList() ?: mutableListOf()
+        return a
     }
 
     fun getDefaultHome(): String? {

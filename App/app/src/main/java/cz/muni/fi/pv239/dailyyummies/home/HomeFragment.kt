@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.maps.model.LatLng
 import cz.muni.fi.pv239.dailyyummies.R
 import cz.muni.fi.pv239.dailyyummies.model.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_home.view.*
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_home.view.*
 class HomeFragment : Fragment() {
 
     private val viewModel: SharedViewModel by activityViewModels()
-    private lateinit var selectedFoodTypes: MutableSet<FoodType>
+    private lateinit var selectedCuisinesIds: MutableList<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,25 +31,47 @@ class HomeFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        initFoodTypes(view)
+        initCuisines(view)
+        initHomeWarning(view)
+        initHomeLoading(view)
 
         return view
     }
 
-    private fun initFoodTypes(view: View) {
-        view.home_food_types.layoutManager = LinearLayoutManager(context)
-        selectedFoodTypes = viewModel.sharedPreferences.retrieveSelectedFoodTypes()
-        view.home_food_types.adapter = HomeAdapter(selectedFoodTypes)
+    private fun initHomeLoading(view: View) {
+       view.homeLoading.visibility =
+           if (viewModel.sharedPreferences.getDefaultHome().isNullOrBlank()) View.GONE else View.VISIBLE
+    }
+
+    private fun initHomeWarning(view: View) {
+        view.homeWarning.visibility =
+            if (viewModel.sharedPreferences.getDefaultHome().isNullOrBlank()) View.VISIBLE else View.GONE
+    }
+
+    private fun initCuisines(view: View) {
+        view.home_cuisines.layoutManager = LinearLayoutManager(context)
+
+        selectedCuisinesIds = viewModel.sharedPreferences.retrieveSelectedCuisines()
+        viewModel.cuisinesSearchResult.observe(viewLifecycleOwner, Observer {
+            view.home_cuisines.adapter = HomeAdapter(selectedCuisinesIds, it.cuisines)
+            view.homeLoading.visibility = if (it.cuisines.isNotEmpty()
+                || viewModel.sharedPreferences.getDefaultHome().isNullOrBlank()) View.GONE else View.VISIBLE
+        })
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.sharedPreferences.setSelectedFoodTypes(selectedFoodTypes)
+        viewModel.sharedPreferences.setSelectedCuisines(selectedCuisinesIds, viewModel.cuisinesSearchResult.value?.cuisines ?: emptyList())
     }
 
     override fun onResume() {
         super.onResume()
 
-        viewModel.mapCoordinates = LatLng(49.193176, 16.610455)
+        view?.let {
+            initHomeWarning(it)
+            initHomeLoading(it)
+        }
+
+        viewModel.fetchApiCuisinesData()
     }
 }

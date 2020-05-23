@@ -7,78 +7,112 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import cz.muni.fi.pv239.dailyyummies.service.networking.Retrofit
-import cz.muni.fi.pv239.dailyyummies.service.networking.data.DailyMenu
-import cz.muni.fi.pv239.dailyyummies.service.networking.data.DailyMenuResult
-import cz.muni.fi.pv239.dailyyummies.service.networking.data.RestaurantHolder
-import cz.muni.fi.pv239.dailyyummies.service.networking.data.SearchResult
+import cz.muni.fi.pv239.dailyyummies.service.networking.data.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ZomatoService(private val context: Context, private val searchResult: MutableLiveData<SearchResult>) {
+class ZomatoService(private val context: Context, private val restaurantsSearchResult: MutableLiveData<RestaurantSearchResult>, private val cuisinesSearchResult: MutableLiveData<CuisineResult>) {
 
     private val retrofit = Retrofit(context)
 
-    private lateinit var result: SearchResult
+    private lateinit var restaurantResult: RestaurantSearchResult
 
     companion object {
         const val BRNO = "Brno"
     }
 
-    /*fun fetchData(city: String?) {
+    fun fetchCuisinesForCityData(city: String?) {
+        fetchCityData(city)
+    }
+
+    private fun fetchCityData(city: String?) {
         retrofit.myApiJson.getCities(city ?: "")
-            .enqueue(object : Callback<CitiesResponse> {
-            override fun onFailure(call: Call<CitiesResponse>, t: Throwable) {
+            .enqueue(object : Callback<CitiesResult> {
+            override fun onFailure(call: Call<CitiesResult>, t: Throwable) {
                 Log.w("Retrofit", "Enqueue cities failed!")
             }
 
-            override fun onResponse(call: Call<CitiesResponse>, response: Response<CitiesResponse>) {
+            override fun onResponse(call: Call<CitiesResult>, response: Response<CitiesResult>) {
                 if (!response.isSuccessful) {
+                    if (response.code() == 500) {
+                        Toast.makeText(context, "API Failed!", Toast.LENGTH_SHORT).show()
+                    }
                     Log.w("Retrofit", "Response cities not successful!")
                 } else {
                     response.body()?.let {
-
-                        Log.d("Retrofit size", it.cities.size.toString())
-                        Log.d("Retrofit name", it.cities.get(0).name)
+                        if (it.cities.isNotEmpty()) {
+                            fetchCuisinesData(it.cities[0].id)
+                        }
                     }
                 }
             }
         })
-    }*/
+    }
 
-    fun fetchRestaurantsData(mapCoordinates: LatLng, radius: Int) {
-        searchResult.postValue(SearchResult())
-        result = SearchResult()
-        fetchRestaurantApi(mapCoordinates, radius, 0)
-        fetchRestaurantApi(mapCoordinates, radius, 20)
-        fetchRestaurantApi(mapCoordinates, radius, 40)
-        fetchRestaurantApi(mapCoordinates, radius, 60)
-        fetchRestaurantApi(mapCoordinates, radius, 80)
+    private fun fetchCuisinesData(cityId: Int) {
+        retrofit.myApiJson.getCuisinesForCity(cityId)
+            .enqueue(object: Callback<CuisineResult> {
+                override fun onFailure(call: Call<CuisineResult>, t: Throwable) {
+                    Log.w("Retrofit", "Enqueue cuisines failed!")
+                }
+
+                override fun onResponse(
+                    call: Call<CuisineResult>,
+                    response: Response<CuisineResult>
+                ) {
+                    if (!response.isSuccessful) {
+                        if (response.code() == 500) {
+                            Toast.makeText(context, "API Failed!", Toast.LENGTH_SHORT).show()
+                        }
+                        Log.w("Retrofit", "Response cuisines not successful!")
+                    } else {
+                        response.body()?.let {
+                            if (it.cuisines.isNotEmpty()) {
+                                cuisinesSearchResult.postValue(it)
+                            }
+                        }
+                    }
+                }
+
+            })
+    }
+
+    fun fetchRestaurantsData(mapCoordinates: LatLng, radius: Int, cuisinesIds: List<Int>) {
+        restaurantsSearchResult.postValue(RestaurantSearchResult())
+        restaurantResult = RestaurantSearchResult()
+        fetchRestaurantApi(mapCoordinates, radius, 0, cuisinesIds.joinToString(separator = ","))
+        fetchRestaurantApi(mapCoordinates, radius, 20, cuisinesIds.joinToString(separator = ","))
+        fetchRestaurantApi(mapCoordinates, radius, 40, cuisinesIds.joinToString(separator = ","))
+        fetchRestaurantApi(mapCoordinates, radius, 60, cuisinesIds.joinToString(separator = ","))
+        fetchRestaurantApi(mapCoordinates, radius, 80, cuisinesIds.joinToString(separator = ","))
     }
 
     private fun fetchRestaurantApi(
         mapCoordinates: LatLng,
         radius: Int,
-        start: Int
+        start: Int,
+        cuisinesIdsSeparatedByComma: String
     ) {
         retrofit.myApiJson.searchRestaurantsByMapCoordinates(
             mapCoordinates.latitude.toString(),
             mapCoordinates.longitude.toString(),
             radius,
-            start
+            start,
+            cuisinesIdsSeparatedByComma
         )
-            .enqueue(object : Callback<SearchResult> {
-                override fun onFailure(call: Call<SearchResult>, t: Throwable) {
+            .enqueue(object : Callback<RestaurantSearchResult> {
+                override fun onFailure(call: Call<RestaurantSearchResult>, t: Throwable) {
                     Log.w("Retrofit", "Enqueue restaurants by map coordinates failed!")
                 }
 
                 override fun onResponse(
-                    call: Call<SearchResult>,
-                    response: Response<SearchResult>
+                    call: Call<RestaurantSearchResult>,
+                    response: Response<RestaurantSearchResult>
                 ) {
                     if (!response.isSuccessful) {
                         if (response.code() == 500) {
-                            Toast.makeText(context, "API Failed!", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "API Failed!", Toast.LENGTH_SHORT).show()
                         }
                         Log.w("Retrofit", "Response restaurants by map coordinates not successful!")
                     } else {
@@ -116,9 +150,9 @@ class ZomatoService(private val context: Context, private val searchResult: Muta
                                 return@let
                             }
                             restaurant.restaurant.menu = it.dailyMenus[0].dailyMenu
-                            result.restaurants.add(restaurant)
-                            result.restaurants.sortBy { it.restaurant.distance }
-                            searchResult.postValue(result)
+                            restaurantResult.restaurants.add(restaurant)
+                            restaurantResult.restaurants.sortBy { it.restaurant.distance }
+                            restaurantsSearchResult.postValue(restaurantResult)
                         }
                     }
                 }
