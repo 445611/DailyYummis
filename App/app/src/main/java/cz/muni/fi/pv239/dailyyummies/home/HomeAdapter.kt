@@ -26,14 +26,10 @@ class HomeAdapter(private val selectedCuisinesIds: MutableList<Int>, private val
 
 class CustomViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
     fun bind(item: CuisineHolder, selectedCuisinesIds: MutableList<Int>) {
-
         view.food_type_checkbox.text = item.cuisine.name
-        if (item.cuisine.id in selectedCuisinesIds) {
-            view.food_type_checkbox.isChecked = true
-        }
-
-        view.food_type_checkbox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
+        view.food_type_checkbox.isChecked = item.cuisine.id in selectedCuisinesIds
+        view.food_type_checkbox.setOnClickListener {
+            if (view.food_type_checkbox.isChecked) {
                 selectedCuisinesIds.add(item.cuisine.id)
             } else {
                 selectedCuisinesIds.remove(item.cuisine.id)

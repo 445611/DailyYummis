@@ -35,9 +35,9 @@ class ZomatoService(private val context: Context, private val restaurantsSearchR
 
             override fun onResponse(call: Call<CitiesResult>, response: Response<CitiesResult>) {
                 if (!response.isSuccessful) {
-                    if (response.code() == 500) {
+                    /*if (response.code() == 500) {
                         Toast.makeText(context, "API Failed!", Toast.LENGTH_SHORT).show()
-                    }
+                    }*/
                     Log.w("Retrofit", "Response cities not successful!")
                 } else {
                     response.body()?.let {
@@ -62,9 +62,9 @@ class ZomatoService(private val context: Context, private val restaurantsSearchR
                     response: Response<CuisineResult>
                 ) {
                     if (!response.isSuccessful) {
-                        if (response.code() == 500) {
+                        /*if (response.code() == 500) {
                             Toast.makeText(context, "API Failed!", Toast.LENGTH_SHORT).show()
-                        }
+                        }*/
                         Log.w("Retrofit", "Response cuisines not successful!")
                     } else {
                         response.body()?.let {
@@ -111,9 +111,9 @@ class ZomatoService(private val context: Context, private val restaurantsSearchR
                     response: Response<RestaurantSearchResult>
                 ) {
                     if (!response.isSuccessful) {
-                        if (response.code() == 500) {
+                        /*if (response.code() == 500) {
                             Toast.makeText(context, "API Failed!", Toast.LENGTH_SHORT).show()
-                        }
+                        }*/
                         Log.w("Retrofit", "Response restaurants by map coordinates not successful!")
                     } else {
                         response.body()?.let { it ->
