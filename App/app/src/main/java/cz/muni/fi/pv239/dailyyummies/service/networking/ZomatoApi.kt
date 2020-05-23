@@ -1,9 +1,6 @@
 package cz.muni.fi.pv239.dailyyummies.service.networking
 
-import cz.muni.fi.pv239.dailyyummies.service.networking.data.CitiesResult
-import cz.muni.fi.pv239.dailyyummies.service.networking.data.Cuisine
-import cz.muni.fi.pv239.dailyyummies.service.networking.data.DailyMenuResult
-import cz.muni.fi.pv239.dailyyummies.service.networking.data.SearchResult
+import cz.muni.fi.pv239.dailyyummies.service.networking.data.*
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -21,8 +18,7 @@ interface ZomatoApi {
 
     @Headers("user-key: $ZOMATO_API_TOKEN")
     @GET("cuisines")
-    fun getCuisinesForCity(@Query("city_id") cityId: Int): Call<List<Cuisine>>
-
+    fun getCuisinesForCity(@Query("city_id") cityId: Int): Call<CuisineResult>
 
     /**
      * categories:
@@ -31,15 +27,15 @@ interface ZomatoApi {
      */
     @Headers("user-key: $ZOMATO_API_TOKEN")
     @GET("search")
-    fun searchRestaurantsByMapCoordinates(@Query("lat") latitude: String, @Query("lon") longitude: String, @Query("radius") radius: Int, @Query("start") start: Int, @Query("sort") sortBy: String = "real_distance", @Query("category") category: String = "9"): Call<SearchResult>
+    fun searchRestaurantsByMapCoordinates(@Query("lat") latitude: String,
+                                          @Query("lon") longitude: String,
+                                          @Query("radius") radius: Int,
+                                          @Query("start") start: Int,
+                                          @Query("cuisines") cuisinesIdsSeparatedByComma: String,
+                                          @Query("sort") sortBy: String = "real_distance",
+                                          @Query("category") category: String = "9"): Call<RestaurantSearchResult>
 
     @Headers("user-key: $ZOMATO_API_TOKEN")
     @GET("dailymenu")
     fun getRestaurantDailyMenu(@Query("res_id") restaurantId: String): Call<DailyMenuResult>
-
-
-    /*@Headers("user-key: $ZOMATO_API_TOKEN")
-    @GET("search")
-    fun searchMenusByCityId(@Query("entity_type") entityType: String = "city", @Query("entity_id") cityId: String): Call<SearchResult>*/
-
 }

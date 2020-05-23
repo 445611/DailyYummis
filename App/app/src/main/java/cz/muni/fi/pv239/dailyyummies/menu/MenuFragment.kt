@@ -10,9 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
 import cz.muni.fi.pv239.dailyyummies.R
-import cz.muni.fi.pv239.dailyyummies.service.networking.data.Restaurant
 import cz.muni.fi.pv239.dailyyummies.model.SharedViewModel
-import cz.muni.fi.pv239.dailyyummies.service.networking.data.RestaurantHolder
 import kotlinx.android.synthetic.main.fragment_menu.view.*
 
 /**
@@ -40,13 +38,13 @@ class MenuFragment : Fragment() {
 
     private fun initRestaurants(view: View) {
         view.menu_restaurants.layoutManager = LinearLayoutManager(context)
-        viewModel.searchResult.observe(viewLifecycleOwner, Observer {
-            if (viewModel.searchResult.value!!.restaurants.isEmpty()) {
+        viewModel.restaurantsSearchResult.observe(viewLifecycleOwner, Observer {
+            if (viewModel.restaurantsSearchResult.value!!.restaurants.isEmpty()) {
                 view.progressBar.visibility = View.VISIBLE
             } else {
                 view.progressBar.visibility = View.GONE
             }
-            view.menu_restaurants.adapter = RestaurantAdapter(viewModel.searchResult.value!!.restaurants)
+            view.menu_restaurants.adapter = RestaurantAdapter(viewModel.restaurantsSearchResult.value!!.restaurants)
         })
     }
 
@@ -57,7 +55,7 @@ class MenuFragment : Fragment() {
         // 49.194935, 16.608381
         //KO 49.210928, 16.593532
         // 49.193176 16.610455 OREL
-
-        viewModel.fetchApiData(requireContext())
+        viewModel.mapCoordinates = LatLng(49.193176, 16.610455)
+        viewModel.fetchApiRestaurantsData()
     }
 }

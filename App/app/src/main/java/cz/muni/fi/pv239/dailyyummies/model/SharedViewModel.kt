@@ -6,7 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
 import cz.muni.fi.pv239.dailyyummies.service.ZomatoService
-import cz.muni.fi.pv239.dailyyummies.service.networking.data.SearchResult
+import cz.muni.fi.pv239.dailyyummies.service.networking.data.CuisineResult
+import cz.muni.fi.pv239.dailyyummies.service.networking.data.RestaurantSearchResult
 
 class SharedViewModel(var mapCoordinates: LatLng? = null, var radius: Int? = null): ViewModel() {
 
@@ -14,22 +15,31 @@ class SharedViewModel(var mapCoordinates: LatLng? = null, var radius: Int? = nul
 
     lateinit var sharedPreferences: SharedPreferences
 
-    private var _searchResult = MutableLiveData<SearchResult>(SearchResult())
+    private var _restaurantsSearchResult = MutableLiveData<RestaurantSearchResult>(RestaurantSearchResult())
+    private var _cuisinesSearchResult = MutableLiveData<CuisineResult>(CuisineResult())
 
-    var searchResult: LiveData<SearchResult> = _searchResult
+    var restaurantsSearchResult: LiveData<RestaurantSearchResult> = _restaurantsSearchResult
+    var cuisinesSearchResult: LiveData<CuisineResult> = _cuisinesSearchResult
 
     fun initSharedPreferences(context: Context) {
         sharedPreferences =
             SharedPreferences(context)
-        zomatoService = ZomatoService(context, _searchResult)
-        //fetchApiData(context)
+        zomatoService = ZomatoService(context, _restaurantsSearchResult, _cuisinesSearchResult)
     }
 
-    fun fetchApiData(context: Context) {
+    fun fetchApiCuisinesData() {
+        _cuisinesSearchResult.postValue(CuisineResult())
+        if (!sharedPreferences.getDefaultHome().isNullOrEmpty()) {
+            zomatoService.fetchCuisinesForCityData(sharedPreferences.getDefaultHome())
+        }
+    }
+
+    fun fetchApiRestaurantsData() {
         if (mapCoordinates != null) {
             zomatoService.fetchRestaurantsData(
                 mapCoordinates!!,
-                radius ?: sharedPreferences.getDefaultRadius()
+                radius ?: sharedPreferences.getDefaultRadius(),
+                sharedPreferences.retrieveSelectedCuisines()
             )
         }
     }

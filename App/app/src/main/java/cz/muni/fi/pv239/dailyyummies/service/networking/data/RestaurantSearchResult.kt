@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.annotations.SerializedName
 
-class SearchResult(@SerializedName("results_found") val resultsFound: Int = 0, val restaurants: MutableList<RestaurantHolder> = mutableListOf())
+class RestaurantSearchResult(@SerializedName("results_found") val resultsFound: Int = 0, val restaurants: MutableList<RestaurantHolder> = mutableListOf())
 
 class RestaurantHolder(val restaurant: Restaurant = Restaurant(), var isExpanded: Boolean = false)
 
