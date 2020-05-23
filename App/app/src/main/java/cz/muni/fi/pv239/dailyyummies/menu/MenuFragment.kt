@@ -44,7 +44,7 @@ class MenuFragment : Fragment() {
             } else {
                 view.progressBar.visibility = View.GONE
             }
-            view.menu_restaurants.adapter = RestaurantAdapter(viewModel.restaurantsSearchResult.value!!.restaurants)
+            view.menu_restaurants.adapter = RestaurantAdapter(viewModel.restaurantsSearchResult.value!!.restaurants, context)
         })
     }
 
@@ -57,5 +57,9 @@ class MenuFragment : Fragment() {
         // 49.193176 16.610455 OREL
         viewModel.mapCoordinates = LatLng(49.193176, 16.610455)
         viewModel.fetchApiRestaurantsData()
+    }
+
+    override fun onStart() {
+        super.onStart()
     }
 }

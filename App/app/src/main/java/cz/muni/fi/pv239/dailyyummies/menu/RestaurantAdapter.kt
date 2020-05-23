@@ -1,22 +1,26 @@
 package cz.muni.fi.pv239.dailyyummies.menu
 
+import android.content.Context
+import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.pv239.dailyyummies.R
+import cz.muni.fi.pv239.dailyyummies.menu.RestaurantInfoActivity
 import cz.muni.fi.pv239.dailyyummies.menu.restaurant.MenuAdapter
 import cz.muni.fi.pv239.dailyyummies.service.networking.data.RestaurantHolder
+import cz.muni.fi.pv239.dailyyummies.utils.hyperlinkStyle
 import cz.muni.fi.pv239.dailyyummies.utils.inflate
 import kotlinx.android.synthetic.main.menu_restaurant_row.view.*
 
 
-class RestaurantAdapter(private val restaurants: List<RestaurantHolder>) :
+class RestaurantAdapter(private val restaurants: List<RestaurantHolder>, private val context: Context?) :
     RecyclerView.Adapter<RestaurantViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
         val row = parent.inflate(R.layout.menu_restaurant_row)
-        return RestaurantViewHolder(row)
+        return RestaurantViewHolder(row, context)
     }
 
     override fun getItemCount(): Int {
@@ -29,10 +33,18 @@ class RestaurantAdapter(private val restaurants: List<RestaurantHolder>) :
 
 }
 
-class RestaurantViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+class RestaurantViewHolder(private val view: View, private val context: Context?) : RecyclerView.ViewHolder(view) {
 
     fun bind(item: RestaurantHolder) {
         view.restaurant_name.text = item.restaurant.name
+        view.restaurant_name.hyperlinkStyle()
+        view.restaurant_name.setOnClickListener {
+            val myIntent = Intent(context, RestaurantInfoActivity::class.java)
+            myIntent.putExtra(RestaurantInfoActivity.RESTAURANT_TITLE_KEY, item.restaurant.name)
+            myIntent.putExtra(RestaurantInfoActivity.RESTAURANT_URL_KEY, item.restaurant.url)
+            context?.startActivity(myIntent)
+        }
+
         view.userRating.text = item.restaurant.rating.userRating.toString()
         view.userRatingText.text = item.restaurant.rating.userRatingText
         view.restaurant_distance.text = item.restaurant.distance.toString()

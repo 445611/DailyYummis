@@ -22,12 +22,12 @@ class SettingsActivity : AppCompatActivity() {
         initSettings()
     }
 
-    fun initSharedPreferences() {
+    private fun initSharedPreferences() {
         sharedPreferences =
             SharedPreferences(this)
     }
 
-    fun initSettings() {
+    private fun initSettings() {
         val defaultHome: EditText = findViewById(R.id.defaultHome)
         defaultHome.addTextChangedListener {
             sharedPreferences.setDefaultHome(defaultHome.text.toString())

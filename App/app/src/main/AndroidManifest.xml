@@ -28,6 +28,13 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
         </activity>
+        <activity
+            android:name=".menu.RestaurantInfoActivity"
+            android:launchMode="singleTop"
+            android:label="@string/restaurant_info"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>

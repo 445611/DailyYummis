@@ -9,6 +9,6 @@ class RestaurantSearchResult(@SerializedName("results_found") val resultsFound: 
 
 class RestaurantHolder(val restaurant: Restaurant = Restaurant(), var isExpanded: Boolean = false)
 
-class Restaurant(val id: String = "", val name: String = "", @SerializedName("user_rating") val rating: UserRating = UserRating(), var distance: Int = 0, val location: LatLng? = null, var menu: DailyMenu = DailyMenu())
+class Restaurant(val id: String = "", val name: String = "", @SerializedName("user_rating") val rating: UserRating = UserRating(), var distance: Int = 0, val location: LatLng? = null, var menu: DailyMenu = DailyMenu(), val url: String = "")
 
 class UserRating(@SerializedName("aggregate_rating") val userRating: Double = 0.0, @SerializedName("rating_text") val userRatingText: String = "")
