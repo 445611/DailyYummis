@@ -81,11 +81,11 @@ class ZomatoService(private val context: Context, private val restaurantsSearchR
     fun fetchRestaurantsData(mapCoordinates: LatLng, radius: Int, cuisinesIds: List<Int>) {
         restaurantsSearchResult.postValue(RestaurantSearchResult())
         restaurantResult = RestaurantSearchResult()
-        fetchRestaurantApi(mapCoordinates, radius, 0, cuisinesIds.joinToString(separator = ","))
-        fetchRestaurantApi(mapCoordinates, radius, 20, cuisinesIds.joinToString(separator = ","))
-        fetchRestaurantApi(mapCoordinates, radius, 40, cuisinesIds.joinToString(separator = ","))
-        fetchRestaurantApi(mapCoordinates, radius, 60, cuisinesIds.joinToString(separator = ","))
-        fetchRestaurantApi(mapCoordinates, radius, 80, cuisinesIds.joinToString(separator = ","))
+//        fetchRestaurantApi(mapCoordinates, radius, 0, cuisinesIds.joinToString(separator = ","))
+//        fetchRestaurantApi(mapCoordinates, radius, 20, cuisinesIds.joinToString(separator = ","))
+//        fetchRestaurantApi(mapCoordinates, radius, 40, cuisinesIds.joinToString(separator = ","))
+//        fetchRestaurantApi(mapCoordinates, radius, 60, cuisinesIds.joinToString(separator = ","))
+//        fetchRestaurantApi(mapCoordinates, radius, 80, cuisinesIds.joinToString(separator = ","))
     }
 
     private fun fetchRestaurantApi(
