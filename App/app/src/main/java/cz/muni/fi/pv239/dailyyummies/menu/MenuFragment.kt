@@ -60,7 +60,7 @@ class MenuFragment : Fragment() {
         // 49.194935, 16.608381
         //KO 49.210928, 16.593532
         // 49.193176 16.610455 OREL
-        viewModel.mapCoordinates = LatLng(49.193176, 16.610455)
+        // viewModel.mapCoordinates = LatLng(49.193176, 16.610455)
         viewModel.fetchApiRestaurantsData()
     }
 
