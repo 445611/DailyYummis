@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.hardware.Camera
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -13,12 +12,12 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.location.*
@@ -28,9 +27,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import cz.muni.fi.pv239.dailyyummies.model.SharedPreferences
 import cz.muni.fi.pv239.dailyyummies.model.SharedViewModel
-import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_map.view.*
 
 
@@ -41,8 +38,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var mapFragment: SupportMapFragment
-    private lateinit var lastLocation: Location
-    private lateinit var currentLatLng: LatLng
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val viewModel: SharedViewModel by activityViewModels()
 
@@ -56,7 +51,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun isLocationEnabled(): Boolean {
-        var locationManager: LocationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var locationManager: LocationManager =
+            activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER
         )
@@ -64,7 +60,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fusedLocationClient = activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
+        fusedLocationClient =
+            activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
 //        mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
 //
 //        mapFragment.getMapAsync(OnMapReadyCallback {
@@ -74,13 +71,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (context?.let {
                 ActivityCompat.checkSelfPermission(
                     it,
-                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
             } != PackageManager.PERMISSION_GRANTED) {
             activity?.let {
                 ActivityCompat.requestPermissions(
                     it,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    LOCATION_PERMISSION_REQUEST_CODE)
+                    LOCATION_PERMISSION_REQUEST_CODE
+                )
             }
         }
     }
@@ -142,7 +141,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     getLastLocation()
 
                 }
-
 
 
 //
@@ -215,7 +213,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //        }
 
 
-
 //        mMap.addMarker(viewModel.mapCoordinates?.let {
 //            MarkerOptions().position(it).title("My position")
 //        })
@@ -243,27 +240,53 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
+        Log.i("LOCATION", "Trying to update location")
         if (isLocationEnabled()) {
 
             activity?.let {
                 fusedLocationClient.lastLocation.addOnCompleteListener(it) { task ->
                     var location: Location? = task.result
-                    if (location == null) {
-                        requestNewLocationData()
-                    } else {
-                        viewModel.mapCoordinates = LatLng(location.getLatitude(), location.getLongitude())
-                        mMap.addMarker(viewModel.mapCoordinates?.let {
-                            MarkerOptions().position(it).title("My position")
-                        })
-                        mMap.moveCamera(
-                            CameraUpdateFactory.newLatLngZoom(
-                                viewModel.mapCoordinates,
-                                16f
-                            )
-                        )
+
+                    requestNewLocationData()
+
+                    if (location != null) {
+                        viewModel.mapCoordinates =
+                            LatLng(location.getLatitude(), location.getLongitude())
                     }
+                    mMap.clear()
+                    mMap.addMarker(viewModel.mapCoordinates?.let {
+                        MarkerOptions().position(it).title("My position")
+                    })
+                    Log.i("LOCATION MARKER", "location marker set")
+                    mMap.moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            viewModel.mapCoordinates,
+                            16f
+                        )
+                    )
+
                 }
             }
+//            activity?.let {
+//                fusedLocationClient.lastLocation.addOnCompleteListener(it) { task ->
+//                    var location: Location? = task.result
+//                    if (location == null) {
+//                        requestNewLocationData()
+//                    } else {
+//                        viewModel.mapCoordinates = LatLng(location.getLatitude(), location.getLongitude())
+//                        mMap.clear()
+//                        mMap.addMarker(viewModel.mapCoordinates?.let {
+//                            MarkerOptions().position(it).title("My position")
+//                        })
+//                        mMap.moveCamera(
+//                            CameraUpdateFactory.newLatLngZoom(
+//                                viewModel.mapCoordinates,
+//                                16f
+//                            )
+//                        )
+//                    }
+//                }
+//            }
         } else {
             Toast.makeText(context, "Turn on location", Toast.LENGTH_LONG).show()
             val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
@@ -273,16 +296,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun requestNewLocationData() {
+        Log.i("LOCATION REQUEST", "Request new location DATA")
         var mLocationRequest = LocationRequest()
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        mLocationRequest.interval = 2000
-        mLocationRequest.fastestInterval = 1000
-//        mLocationRequest.interval = 0
-//        mLocationRequest.fastestInterval = 0
-//        mLocationRequest.numUpdates = 1
+        mLocationRequest.interval = 1000
+        mLocationRequest.fastestInterval = 200
 
-        //fusedLocationClient = activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
-        fusedLocationClient!!.requestLocationUpdates(
+        fusedLocationClient =
+            activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
+        fusedLocationClient.requestLocationUpdates(
             mLocationRequest, locationCallback,
             Looper.myLooper()
         )
@@ -290,8 +312,21 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
+            Log.i("LOCATION RESULT", "new location DATA result")
             var mLastLocation: Location = locationResult.lastLocation
-            viewModel.mapCoordinates = LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())
+            viewModel.mapCoordinates =
+                LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())
+            mMap.clear()
+            mMap.addMarker(viewModel.mapCoordinates?.let {
+                MarkerOptions().position(it).title("My position")
+            })
+            Log.i("LOCATION MARKER", "location marker set")
+            mMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    viewModel.mapCoordinates,
+                    16f
+                )
+            )
         }
     }
 
