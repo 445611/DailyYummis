@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
@@ -80,6 +81,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 )
             }
         }
+
     }
 
     override fun onCreateView(
@@ -112,6 +114,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         })
 
+        val centerPosition = view.findViewById(R.id.centerPosition) as Button
+
+        centerPosition.setOnClickListener {
+            mMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    viewModel.mapCoordinates,
+                    16f
+                )
+            )
+        }
+
         mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
 
         if (context?.let {
@@ -143,7 +156,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     )
                 })
             }
-
 
         } else {
             view.map1Warning.visibility = View.GONE
@@ -181,8 +193,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     mMap.addMarker(viewModel.mapCoordinates?.let {
                         MarkerOptions().position(it).title("My position")
                     })
-                    Log.i("LOCATION MARKER", "location marker set")
-                    mMap.moveCamera(
+                    mMap.animateCamera(
                         CameraUpdateFactory.newLatLngZoom(
                             viewModel.mapCoordinates,
                             16f
@@ -227,12 +238,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 MarkerOptions().position(it).title("My position")
             })
             Log.i("LOCATION MARKER", "location marker set")
-            mMap.moveCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    viewModel.mapCoordinates,
-                    16f
-                )
-            )
         }
     }
 
