@@ -50,11 +50,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val viewModel: SharedViewModel by activityViewModels()
 
-    //    private var hasGps = false
-//    private var hasNetwork = false
-//    private var locationGps: Location? = null
-//    private var locationNetwork: Location? = null
-
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
@@ -71,11 +66,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         fusedLocationClient =
             activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
-//        mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-//
-//        mapFragment.getMapAsync(OnMapReadyCallback {
-//            mMap = it
-//        })
         if (context?.let {
                 ActivityCompat.checkSelfPermission(
                     it,
@@ -121,11 +111,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 sliderValue.text = slider.progress.toString() + " m"
             }
         })
-//        mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-//
-//        mapFragment.getMapAsync(OnMapReadyCallback {
-//            it
-//        })
 
         mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
 
@@ -172,100 +157,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     getLastLocation()
 
                 }
-
-
-//
-//                // FUNGUJE NA AKTUALNU POLOHU PIN
-//                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-//                    // Got last known location. In some rare situations this can be null.
-//                    // 3
-//                    if (location != null) {
-//                        lastLocation = location
-//                        viewModel.mapCoordinates = LatLng(location.latitude, location.longitude)
-//                        mMap.addMarker(viewModel.mapCoordinates?.let {
-//                            MarkerOptions().position(it).title("My position")
-//                        })
-//                        mMap.animateCamera(
-//                            CameraUpdateFactory.newLatLngZoom(
-//                                viewModel.mapCoordinates,
-//                                12f
-//                            )
-//                        )
-//                    }
-//                }
             })
         }
-
-//        if (viewModel.sharedPreferences.getDefaultHome().isNullOrBlank()) {
-//            initMapWarning(view)
-//        } else {
-//            mapFragment.getMapAsync(OnMapReadyCallback {
-//                mMap = it
-//                initMapWarning(view)
-//                if (context?.let {
-//                        ActivityCompat.checkSelfPermission(
-//                            it,
-//                            Manifest.permission.ACCESS_FINE_LOCATION
-//                        )
-//                    } == PackageManager.PERMISSION_DENIED) {
-//                    initMapWarning(view)
-//                    getCityCoordinates(view)
-//                    mMap.addMarker(viewModel.mapCoordinates?.let {
-//                        MarkerOptions().position(it).title("My position")
-//                    })
-//                    mMap.animateCamera(
-//                        CameraUpdateFactory.newLatLngZoom(
-//                            viewModel.mapCoordinates,
-//                            12f
-//                        )
-//                    )
-//                } else {
-//                    fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-//                        // Got last known location. In some rare situations this can be null.
-//                        // 3
-//                        if (location != null) {
-//                            lastLocation = location
-//                            viewModel.mapCoordinates = LatLng(location.latitude, location.longitude)
-//                            mMap.addMarker(viewModel.mapCoordinates?.let {
-//                                MarkerOptions().position(it).title("My position")
-//                            })
-//                            mMap.animateCamera(
-//                                CameraUpdateFactory.newLatLngZoom(
-//                                    viewModel.mapCoordinates,
-//                                    12f
-//                                )
-//                            )
-//                        } else {
-//                            getCityCoordinates(view)
-//                        }
-//                    }
-//                }
-//            })
-//        }
-
-
-//        mMap.addMarker(viewModel.mapCoordinates?.let {
-//            MarkerOptions().position(it).title("My position")
-//        })
-//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(viewModel.mapCoordinates, 12f))
-//
-//        mapFragment.getMapAsync(OnMapReadyCallback {
-//            mMap = it
-//
-//            // getStartLocation()
-//
-//            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-//                // Got last known location. In some rare situations this can be null.
-//                // 3
-//                if (location != null) {
-//                    lastLocation = location
-//                    currentLatLng = LatLng(location.latitude, location.longitude)
-//                    mMap.addMarker(MarkerOptions().position(currentLatLng).title("Marker almost at home"))
-//                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
-//                }
-//            }
-//        })
-
         return view
     }
 
@@ -298,26 +191,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                 }
             }
-//            activity?.let {
-//                fusedLocationClient.lastLocation.addOnCompleteListener(it) { task ->
-//                    var location: Location? = task.result
-//                    if (location == null) {
-//                        requestNewLocationData()
-//                    } else {
-//                        viewModel.mapCoordinates = LatLng(location.getLatitude(), location.getLongitude())
-//                        mMap.clear()
-//                        mMap.addMarker(viewModel.mapCoordinates?.let {
-//                            MarkerOptions().position(it).title("My position")
-//                        })
-//                        mMap.moveCamera(
-//                            CameraUpdateFactory.newLatLngZoom(
-//                                viewModel.mapCoordinates,
-//                                16f
-//                            )
-//                        )
-//                    }
-//                }
-//            }
         } else {
             Toast.makeText(context, "Turn on location", Toast.LENGTH_LONG).show()
             val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
@@ -370,44 +243,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         return
     }
 
-    private fun initMapWarning(view: View) {
-//        view.map1Warning.visibility = View.VISIBLE
-//        view.map2Warning.visibility = View.VISIBLE
-//        mapFragment.view?.visibility = View.GONE
-
-        view.map1Warning.visibility =
-            if (viewModel.sharedPreferences.getDefaultHome().isNullOrBlank()) {
-                mapFragment.view?.visibility = View.GONE
-                View.VISIBLE
-            } else {
-                mapFragment.view?.visibility = View.VISIBLE
-                View.GONE
-            }
-        view.map2Warning.visibility =
-            if (viewModel.sharedPreferences.getDefaultHome().isNullOrBlank()) {
-                mapFragment.view?.visibility = View.GONE
-                View.VISIBLE
-            } else {
-                mapFragment.view?.visibility = View.VISIBLE
-                View.GONE
-            }
-    }
-
-
-    private fun initStartCoordinates(view: View) {
-
-
-    }
-
     private fun getCityCoordinates(view: View) {
-//        view.mapLoading.visibility = if (
-//            viewModel.sharedPreferences.getDefaultHome().isNullOrBlank()) View.VISIBLE else View.GONE
-
         val geocoder = Geocoder(context)
         val addresses: List<Address> =
             geocoder.getFromLocationName(viewModel.sharedPreferences.getDefaultHome(), 1)
         val address: Address = addresses[0]
-        // currentLatLng = LatLng(address.getLatitude(), address.getLongitude())
         viewModel.mapCoordinates = LatLng(address.getLatitude(), address.getLongitude())
     }
 }
