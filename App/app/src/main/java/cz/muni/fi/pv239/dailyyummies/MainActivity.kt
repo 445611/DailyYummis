@@ -12,7 +12,6 @@ import com.google.android.gms.maps.model.LatLng
 import cz.muni.fi.pv239.dailyyummies.model.SharedViewModel
 import cz.muni.fi.pv239.dailyyummies.settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import cz.muni.fi.pv239.dailyyummies.service.MapCoordinates
 
 class MainActivity : AppCompatActivity() {
 
