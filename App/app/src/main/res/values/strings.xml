@@ -13,6 +13,7 @@
     <string name="expand_menus">Expand menus</string>
     <string name="homeWarning">Set default home in settings</string>
     <string name="mapWarning">or refresh and allow the location tracking</string>
+    <string name="RangeLabel">Range</string>
     <string name="restaurant_info">Restaurant Info</string>
     <string name="check_all">Check all</string>
     <string name="uncheck_all">Uncheck all</string>

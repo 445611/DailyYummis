@@ -2,6 +2,7 @@ package cz.muni.fi.pv239.dailyyummies
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -16,9 +17,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,6 +34,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import cz.muni.fi.pv239.dailyyummies.model.SharedViewModel
+import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.fragment_map.view.*
 
 
@@ -38,10 +45,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var mapFragment: SupportMapFragment
+    private lateinit var slider: SeekBar
+    private lateinit var sliderValue: TextView
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val viewModel: SharedViewModel by activityViewModels()
 
-//    private var hasGps = false
+    //    private var hasGps = false
 //    private var hasNetwork = false
 //    private var locationGps: Location? = null
 //    private var locationNetwork: Location? = null
@@ -67,7 +76,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //        mapFragment.getMapAsync(OnMapReadyCallback {
 //            mMap = it
 //        })
-
         if (context?.let {
                 ActivityCompat.checkSelfPermission(
                     it,
@@ -90,6 +98,29 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_map, container, false)
 
+        slider = view.findViewById(R.id.seekBar) as SeekBar
+        slider.progress = viewModel.sharedPreferences.getDefaultRadius()
+        sliderValue = view.findViewById(R.id.rangeValue) as TextView
+        sliderValue.text = slider.progress.toString() + " m"
+        slider.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            var pval = 0
+            override fun onProgressChanged(
+                seekBar: SeekBar,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+                pval = progress
+                sliderValue.text = pval.toString() + " m"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                sliderValue.text = slider.progress.toString() + " m"
+            }
+        })
 //        mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
 //
 //        mapFragment.getMapAsync(OnMapReadyCallback {
@@ -296,6 +327,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun requestNewLocationData() {
+
         Log.i("LOCATION REQUEST", "Request new location DATA")
         var mLocationRequest = LocationRequest()
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -312,6 +344,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
+
             Log.i("LOCATION RESULT", "new location DATA result")
             var mLastLocation: Location = locationResult.lastLocation
             viewModel.mapCoordinates =
