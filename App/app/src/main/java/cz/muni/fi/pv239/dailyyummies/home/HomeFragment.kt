@@ -31,11 +31,39 @@ class HomeFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
+        initCheckBoxes(view)
         initCuisines(view)
         initHomeWarning(view)
         initHomeLoading(view)
 
         return view
+    }
+
+    private fun initCheckBoxes(view: View) {
+        view.checkBox_checkAll.setOnClickListener {
+            view.checkBox_checkAll.isChecked = true
+            val cuisines = viewModel
+                .cuisinesSearchResult
+                .value
+                ?.cuisines
+                ?.map { it.cuisine.id }
+                ?.toMutableList() ?: mutableListOf()
+            selectedCuisinesIds.removeAll(cuisines)
+            selectedCuisinesIds.addAll(cuisines)
+            view.home_cuisines.adapter?.notifyDataSetChanged()
+        }
+
+        view.checkBox_uncheckAll.setOnClickListener {
+            view.checkBox_uncheckAll.isChecked = false
+            selectedCuisinesIds.removeAll(
+                viewModel
+                    .cuisinesSearchResult
+                    .value
+                    ?.cuisines
+                    ?.map { it.cuisine.id }
+                    ?.toMutableList() ?: mutableListOf())
+            view.home_cuisines.adapter?.notifyDataSetChanged()
+        }
     }
 
     private fun initHomeLoading(view: View) {

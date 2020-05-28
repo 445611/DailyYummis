@@ -121,6 +121,7 @@ class ZomatoService(private val context: Context, private val restaurantsSearchR
                                 Log.d("Restaurant", restaurant.restaurant.name)
                             }
                             calculateRestaurantDistances(mapCoordinates, radius, it.restaurants)
+                            it.restaurants.removeAll { it.restaurant.distance > radius }
                             fetchMenus(it.restaurants)
                         }
                     }
