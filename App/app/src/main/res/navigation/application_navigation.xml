@@ -13,7 +13,7 @@
     </fragment>
     <fragment
         android:id="@+id/secondFragmentNav"
-        android:name="cz.muni.fi.pv239.dailyyummies.MapFragment"
+        android:name="cz.muni.fi.pv239.dailyyummies.map.MapFragment"
         android:label="fragment_second"
         tools:layout="@layout/fragment_map" >
     </fragment>
