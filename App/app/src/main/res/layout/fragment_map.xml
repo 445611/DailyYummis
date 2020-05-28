@@ -16,14 +16,32 @@
     <!--  0 - 2000 metrov  -->
     <androidx.appcompat.widget.AppCompatSeekBar
         android:id="@+id/seekBar"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="15dp"
         android:layout_marginTop="60dp"
+        android:max="2000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/rangeValue"
+        android:layout_width="50dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="60dp"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/seekBar"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="50dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="60dp"
+        android:textSize="14sp"
+        android:text="@string/RangeLabel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/seekBar"/>
 
     <TextView
         android:id="@+id/map1Warning"
