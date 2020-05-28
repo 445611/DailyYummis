@@ -32,8 +32,13 @@ class MenuFragment : Fragment() {
 
         view.progressBar.visibility = View.VISIBLE
         initRestaurants(view)
+        initRangeText(view)
 
         return view;
+    }
+
+    private fun initRangeText(view: View) {
+        view.rangeText.text = viewModel.sharedPreferences.getDefaultRadius().toString()
     }
 
     private fun initRestaurants(view: View) {
@@ -50,7 +55,7 @@ class MenuFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
+        initRangeText(requireView())
         // Coordinates from GOOGLE MAPS set like this 48.725166, 21.276871
         // 49.194935, 16.608381
         //KO 49.210928, 16.593532

@@ -24,7 +24,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/menu_list_text">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -37,5 +37,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/menu_list_text" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/menu_list_text">
+
+        <TextView
+            android:id="@+id/inRagneText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:textSize="12sp"
+            android:text="@string/in_range" />
+
+        <TextView
+            android:id="@+id/rangeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:textSize="12sp"
+            android:text="1000" />
+
+        <TextView
+            android:id="@+id/rangeTextMetres"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="@string/metres" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
