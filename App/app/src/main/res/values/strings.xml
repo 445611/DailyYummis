@@ -9,10 +9,12 @@
     <string name="home_navbar_title">HOME</string>
     <string name="map_navbar_title">MAP</string>
     <string name="menus_navbar_title">MENUS</string>
-    <string name="default_radius">Default radius</string>
+    <string name="default_radius">Default range</string>
     <string name="expand_menus">Expand menus</string>
     <string name="homeWarning">Set default home in settings</string>
     <string name="restaurant_info">Restaurant Info</string>
     <string name="check_all">Check all</string>
     <string name="uncheck_all">Uncheck all</string>
+    <string name="metres">m</string>
+    <string name="in_range">In range</string>
 </resources>
