@@ -1,9 +1,12 @@
 package cz.muni.fi.pv239.dailyyummies.settings
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import cz.muni.fi.pv239.dailyyummies.MainActivity
 import cz.muni.fi.pv239.dailyyummies.R
 import cz.muni.fi.pv239.dailyyummies.model.SharedPreferences
 
@@ -20,6 +23,15 @@ class SettingsActivity : AppCompatActivity() {
 
         initSharedPreferences()
         initSettings()
+        navigateToHome()
+    }
+
+    private fun navigateToHome() {
+        val homeButton = findViewById<Button>(R.id.homeButton)
+
+        homeButton.setOnClickListener {
+            startActivity(Intent(applicationContext, MainActivity::class.java))
+        }
     }
 
     private fun initSharedPreferences() {
