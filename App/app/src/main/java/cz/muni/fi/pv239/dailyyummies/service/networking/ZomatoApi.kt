@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface ZomatoApi {
 
     companion object {
-        const val ZOMATO_API_TOKEN = "13fd02ba025ac2eff001b779ba95ef02";
+        const val ZOMATO_API_TOKEN = "13fd02ba025ac2eff001b779ba95ef02"
     }
 
     @Headers("user-key: $ZOMATO_API_TOKEN")

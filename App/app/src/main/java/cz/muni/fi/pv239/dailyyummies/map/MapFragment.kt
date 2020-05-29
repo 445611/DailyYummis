@@ -101,6 +101,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             ) {
                 pval = progress
                 sliderValue.text = pval.toString() + " m"
+                viewModel.sharedPreferences.setDefaultRadius(pval)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {

@@ -28,22 +28,22 @@
 
     <TextView
         android:id="@+id/rangeValue"
-        android:layout_width="50dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/seekBar"
         app:layout_constraintStart_toEndOf="@id/seekBar"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/seekBar" />
 
     <TextView
         android:id="@+id/textView1"
-        android:layout_width="50dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="60dp"
-        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/RangeLabel"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/seekBar"/>
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/seekBar"
+        app:layout_constraintEnd_toStartOf="@id/seekBar"
+        app:layout_constraintTop_toTopOf="@+id/seekBar" />
 
     <TextView
         android:id="@+id/map1Warning"
@@ -72,10 +72,9 @@
         android:id="@+id/centerPosition"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="40dp"
-        android:layout_marginRight="40dp"
         android:drawableLeft="@drawable/ic_location_center_black_24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/map"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="40dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

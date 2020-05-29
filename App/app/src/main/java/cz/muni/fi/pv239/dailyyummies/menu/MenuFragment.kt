@@ -34,7 +34,7 @@ class MenuFragment : Fragment() {
         initRestaurants(view)
         initRangeText(view)
 
-        return view;
+        return view
     }
 
     private fun initRangeText(view: View) {

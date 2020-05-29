@@ -31,7 +31,7 @@ class SharedPreferences(context: Context) {
     }
 
     fun getDefaultHome(): String? {
-        return preferences.getString(DEFAULT_HOME, "");
+        return preferences.getString(DEFAULT_HOME, "")
     }
 
     fun setDefaultHome(new_home: String) {
@@ -39,7 +39,7 @@ class SharedPreferences(context: Context) {
     }
 
     fun getDefaultRadius(): Int {
-        return preferences.getInt(DEFAULT_RADIUS, 500);
+        return preferences.getInt(DEFAULT_RADIUS, 500)
     }
 
     fun setDefaultRadius(new_radius: Int) {

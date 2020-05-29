@@ -32,12 +32,12 @@ class SettingsActivity : AppCompatActivity() {
         defaultHome.addTextChangedListener {
             sharedPreferences.setDefaultHome(defaultHome.text.toString())
         }
-        defaultHome.setText(sharedPreferences.getDefaultHome());
+        defaultHome.setText(sharedPreferences.getDefaultHome())
 
         val defaultRadius: EditText = findViewById(R.id.defaultRadius)
         defaultRadius.addTextChangedListener {
             sharedPreferences.setDefaultRadius(defaultRadius.text.toString().toIntOrNull() ?: 0)
         }
-        defaultRadius.setText(sharedPreferences.getDefaultRadius().toString());
+        defaultRadius.setText(sharedPreferences.getDefaultRadius().toString())
     }
 }
