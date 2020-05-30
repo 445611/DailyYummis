@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
+
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -22,6 +24,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.location.*
@@ -29,11 +32,12 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import cz.muni.fi.pv239.dailyyummies.R
 import cz.muni.fi.pv239.dailyyummies.model.SharedViewModel
-import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.fragment_map.view.*
 
 
@@ -48,6 +52,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var sliderValue: TextView
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val viewModel: SharedViewModel by activityViewModels()
+    private lateinit var restaurantIcon: Drawable
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -63,6 +68,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel.fetchApiRestaurantsData()
+        //restaurantIcon = Drawable.createFromPath("~/res/mipmap-hdpi/ic_restaurant_marker.png")!!
+
         fusedLocationClient =
             activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
         if (context?.let {
@@ -133,7 +142,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 )
             } == PackageManager.PERMISSION_DENIED) {
             if (viewModel.sharedPreferences.getDefaultHome().isNullOrBlank()) {
-                //initMapWarning(view)
                 view.map1Warning.visibility = View.VISIBLE
                 view.map2Warning.visibility = View.VISIBLE
                 mapFragment.view?.visibility = View.GONE
@@ -150,9 +158,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     mMap.animateCamera(
                         CameraUpdateFactory.newLatLngZoom(
                             viewModel.mapCoordinates,
-                            12f
+                            16f
                         )
                     )
+                    markRestaurantsOnMap()
                 })
             }
 
@@ -166,7 +175,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     // Got last known location. In some rare situations this can be null.
                     // 3
                     getLastLocation()
-
                 }
             })
         }
@@ -190,7 +198,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     }
                     mMap.clear()
                     mMap.addMarker(viewModel.mapCoordinates?.let {
-                        MarkerOptions().position(it).title("My position")
+                        MarkerOptions().position(it).title("YOU")
                     })
                     mMap.animateCamera(
                         CameraUpdateFactory.newLatLngZoom(
@@ -198,7 +206,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             16f
                         )
                     )
-
                 }
             }
         } else {
@@ -233,8 +240,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             viewModel.mapCoordinates =
                 LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())
             mMap.clear()
+            markRestaurantsOnMap()
             mMap.addMarker(viewModel.mapCoordinates?.let {
-                MarkerOptions().position(it).title("My position")
+                MarkerOptions().position(it).title("YOU")
             })
             Log.i("LOCATION MARKER", "location marker set")
         }
@@ -254,4 +262,24 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val address: Address = addresses[0]
         viewModel.mapCoordinates = LatLng(address.getLatitude(), address.getLongitude())
     }
+
+    private fun markRestaurantsOnMap() {
+        val restaurants = getRestaurantNameAndCords()
+
+        if (restaurants != null) {
+            for (restaurant in restaurants) {
+               // mMap = it
+                mMap.addMarker(restaurant.value?.let {
+                    MarkerOptions().position(it)
+                        .title(restaurant.key)
+                        //.icon(BitmapDescriptorFactory.fromBitmap(restaurantIcon.toBitmap()))
+                })
+            }
+        }
+    }
+
+    private fun getRestaurantNameAndCords(): Map<String, LatLng?>? {
+        return viewModel.restaurantsSearchResult.value?.restaurants?.map {it.restaurant.name to it.restaurant.location }?.toMap()
+    }
+
 }

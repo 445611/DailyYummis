@@ -83,8 +83,8 @@ class ZomatoService(private val context: Context, private val restaurantsSearchR
         restaurantResult = RestaurantSearchResult()
         //MOCKED
         restaurantResult.restaurants.add(RestaurantHolder(Restaurant(name = "Fiktivna restika", location = LatLng(49.202429 , 16.6010761), distance = 100)))
-        restaurantResult.restaurants.add(RestaurantHolder(Restaurant(name = "Fiktivna restika1", location = LatLng(49.202428, 16.6010760), distance = 200)))
-        restaurantResult.restaurants.add(RestaurantHolder(Restaurant(name = "Fiktivna restika2", location = LatLng(49.202427, 16.6010762), distance = 300)))
+        restaurantResult.restaurants.add(RestaurantHolder(Restaurant(name = "Fiktivna restika1", location = LatLng(49.202039, 16.6011060), distance = 200)))
+        restaurantResult.restaurants.add(RestaurantHolder(Restaurant(name = "Fiktivna restika2", location = LatLng(49.202549, 16.6010462), distance = 300)))
         restaurantResult.restaurants.sortBy { it.restaurant.distance }
         restaurantsSearchResult.postValue(restaurantResult)
         //MOCKED
