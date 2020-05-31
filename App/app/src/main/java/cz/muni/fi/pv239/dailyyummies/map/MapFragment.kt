@@ -5,8 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
-
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -24,7 +22,6 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.location.*
@@ -32,7 +29,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -52,7 +48,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var sliderValue: TextView
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val viewModel: SharedViewModel by activityViewModels()
-    private lateinit var restaurantIcon: Drawable
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -272,7 +267,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 mMap.addMarker(restaurant.value?.let {
                     MarkerOptions().position(it)
                         .title(restaurant.key)
-                        //.icon(BitmapDescriptorFactory.fromBitmap(restaurantIcon.toBitmap()))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_restaurant_marker))
                 })
             }
         }
