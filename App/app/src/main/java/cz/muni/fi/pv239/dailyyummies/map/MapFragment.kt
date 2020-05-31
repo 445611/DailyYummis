@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -29,9 +30,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import cz.muni.fi.pv239.dailyyummies.R
 import cz.muni.fi.pv239.dailyyummies.model.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_map.view.*
@@ -48,6 +47,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var sliderValue: TextView
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val viewModel: SharedViewModel by activityViewModels()
+    private lateinit var myPosition: Marker
+    private lateinit var circle: Circle
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -63,9 +64,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel.fetchApiRestaurantsData()
-        //restaurantIcon = Drawable.createFromPath("~/res/mipmap-hdpi/ic_restaurant_marker.png")!!
 
         fusedLocationClient =
             activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
@@ -104,6 +102,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 fromUser: Boolean
             ) {
                 pval = progress
+                viewModel.sharedPreferences.setDefaultRadius(pval)
                 sliderValue.text = pval.toString() + " m"
                 viewModel.sharedPreferences.setDefaultRadius(pval)
             }
@@ -113,7 +112,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
+                viewModel.sharedPreferences.setDefaultRadius(pval)
                 sliderValue.text = slider.progress.toString() + " m"
+                viewModel.fetchApiRestaurantsData()
+                mMap.clear()
+                myPosition = mMap.addMarker(viewModel.mapCoordinates?.let {
+                    MarkerOptions().position(it).title("HomeTown")
+                })
+                drawCircle()
+                markRestaurantsOnMap()
             }
         })
 
@@ -147,8 +154,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 mapFragment.getMapAsync(OnMapReadyCallback {
                     mMap = it
                     getCityCoordinates(view)
-                    mMap.addMarker(viewModel.mapCoordinates?.let {
-                        MarkerOptions().position(it).title("My position")
+                    viewModel.fetchApiRestaurantsData()
+                    myPosition = mMap.addMarker(viewModel.mapCoordinates?.let {
+                        MarkerOptions().position(it).title("HomeTown")
                     })
                     mMap.animateCamera(
                         CameraUpdateFactory.newLatLngZoom(
@@ -156,6 +164,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             16f
                         )
                     )
+                    drawCircle()
                     markRestaurantsOnMap()
                 })
             }
@@ -190,9 +199,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     if (location != null) {
                         viewModel.mapCoordinates =
                             LatLng(location.getLatitude(), location.getLongitude())
+                        viewModel.fetchApiRestaurantsData()
                     }
-                    mMap.clear()
-                    mMap.addMarker(viewModel.mapCoordinates?.let {
+                    myPosition = mMap.addMarker(viewModel.mapCoordinates?.let {
                         MarkerOptions().position(it).title("YOU")
                     })
                     mMap.animateCamera(
@@ -201,6 +210,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             16f
                         )
                     )
+                    drawCircle()
                 }
             }
         } else {
@@ -234,9 +244,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             var mLastLocation: Location = locationResult.lastLocation
             viewModel.mapCoordinates =
                 LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())
-            mMap.clear()
+            myPosition.remove()
             markRestaurantsOnMap()
-            mMap.addMarker(viewModel.mapCoordinates?.let {
+            myPosition = mMap.addMarker(viewModel.mapCoordinates?.let {
                 MarkerOptions().position(it).title("YOU")
             })
             Log.i("LOCATION MARKER", "location marker set")
@@ -263,7 +273,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         if (restaurants != null) {
             for (restaurant in restaurants) {
-               // mMap = it
                 mMap.addMarker(restaurant.value?.let {
                     MarkerOptions().position(it)
                         .title(restaurant.key)
@@ -277,4 +286,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         return viewModel.restaurantsSearchResult.value?.restaurants?.map {it.restaurant.name to it.restaurant.location }?.toMap()
     }
 
+    private fun drawCircle() {
+        circle = mMap.addCircle(
+            CircleOptions()
+                .center(viewModel.mapCoordinates)
+                .radius(viewModel.sharedPreferences.getDefaultRadius().toDouble())
+                .strokeColor(Color.BLUE)
+        )
+    }
 }

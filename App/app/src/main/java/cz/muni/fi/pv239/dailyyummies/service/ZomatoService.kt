@@ -82,18 +82,19 @@ class ZomatoService(private val context: Context, private val restaurantsSearchR
         restaurantsSearchResult.postValue(RestaurantSearchResult())
         restaurantResult = RestaurantSearchResult()
         //MOCKED
-        restaurantResult.restaurants.add(RestaurantHolder(Restaurant(name = "Fiktivna restika", location = LatLng(49.202429 , 16.6010761), distance = 100)))
-        restaurantResult.restaurants.add(RestaurantHolder(Restaurant(name = "Fiktivna restika1", location = LatLng(49.202039, 16.6011060), distance = 200)))
-        restaurantResult.restaurants.add(RestaurantHolder(Restaurant(name = "Fiktivna restika2", location = LatLng(49.202549, 16.6010462), distance = 300)))
-        restaurantResult.restaurants.sortBy { it.restaurant.distance }
-        restaurantsSearchResult.postValue(restaurantResult)
+//        restaurantResult.restaurants.add(RestaurantHolder(Restaurant(name = "Fiktivna restika", location = LatLng(49.202429 , 16.6010761), distance = 100)))
+//        restaurantResult.restaurants.add(RestaurantHolder(Restaurant(name = "Fiktivna restika1", location = LatLng(49.202039, 16.6011060), distance = 200)))
+//        restaurantResult.restaurants.add(RestaurantHolder(Restaurant(name = "Fiktivna restika2", location = LatLng(49.202549, 16.6010462), distance = 300)))
+//        restaurantResult.restaurants.removeAll { it.restaurant.distance > radius }
+//        restaurantResult.restaurants.sortBy { it.restaurant.distance }
+//        restaurantsSearchResult.postValue(restaurantResult)
         //MOCKED
 
-//        fetchRestaurantApi(mapCoordinates, radius, 0, cuisinesIds.joinToString(separator = ","))
-//        fetchRestaurantApi(mapCoordinates, radius, 20, cuisinesIds.joinToString(separator = ","))
-//        fetchRestaurantApi(mapCoordinates, radius, 40, cuisinesIds.joinToString(separator = ","))
-//        fetchRestaurantApi(mapCoordinates, radius, 60, cuisinesIds.joinToString(separator = ","))
-//        fetchRestaurantApi(mapCoordinates, radius, 80, cuisinesIds.joinToString(separator = ","))
+        fetchRestaurantApi(mapCoordinates, radius, 0, cuisinesIds.joinToString(separator = ","))
+        fetchRestaurantApi(mapCoordinates, radius, 20, cuisinesIds.joinToString(separator = ","))
+        fetchRestaurantApi(mapCoordinates, radius, 40, cuisinesIds.joinToString(separator = ","))
+        fetchRestaurantApi(mapCoordinates, radius, 60, cuisinesIds.joinToString(separator = ","))
+        fetchRestaurantApi(mapCoordinates, radius, 80, cuisinesIds.joinToString(separator = ","))
     }
 
     private fun fetchRestaurantApi(
